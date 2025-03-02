@@ -1,4 +1,6 @@
-# 💤 LazyVim
-
-A starter template for [LazyVim](https://github.com/LazyVim/LazyVim).
-Refer to the [documentation](https://lazyvim.github.io/installation) to get started.
+# installation
+- Install zig compiler
+- Make sure to update all plugin (l + shift S to sync)
+- Install the following package on your OS: fzf, lazygit, ripgrep and fd
+# Documentation 
+https://lazyvim-ambitious-devs.phillips.codes/course/chapter-2/
