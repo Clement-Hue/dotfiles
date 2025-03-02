@@ -1,4 +1,4 @@
-# installation
+# Installation
 - Install zig compiler
 - Make sure to update all plugin (l + shift S to sync)
 - Install the following package on your OS: fzf, lazygit, ripgrep and fd
