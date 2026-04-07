@@ -3,11 +3,33 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo "Oh My Zsh not found. Installing..."
     git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
 fi
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export ZSH_CUSTOM="$XDG_CONFIG_HOME/zsh"
+
+# Directory for your Zsh plugins
+ZSH_PLUGINS_DIR="$ZSH_CUSTOM/plugins"
+
+typeset -A ZSH_PLUGINS
+ZSH_PLUGINS=(
+  zsh-autosuggestions  "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+  zsh-completions      "$ZSH_CUSTOM/plugins/zsh-completions"
+  zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+)
+
+# Ensure plugins directory exists
+mkdir -p "$ZSH_PLUGINS_DIR"
+
+# Loop through plugins: clone if missing, then source
+for plugin in ${(k)ZSH_PLUGINS}; do
+  PLUGIN_PATH="$ZSH_PLUGINS_DIR/$plugin"
+  if [ ! -d "$PLUGIN_PATH" ]; then
+    echo "Plugin '$plugin' not found. Cloning..."
+    git clone "${ZSH_PLUGINS[$plugin]}" "$PLUGIN_PATH"
+  fi
+done
+
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
