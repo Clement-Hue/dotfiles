@@ -1,3 +1,9 @@
+# # --- Install Oh My Bash if not present ---
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Oh My Zsh not found. Installing..."
+    git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
