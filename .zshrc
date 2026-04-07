@@ -72,6 +72,8 @@ ZSH_THEME="robbyrussell"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+autoload -U compinit && compinit
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
@@ -121,3 +123,4 @@ bindkey -v
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 bindkey '^E' autosuggest-accept
+bindkey '^R' history-incremental-search-backward
