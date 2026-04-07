@@ -1,5 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export ZSH_CUSTOM="$XDG_CONFIG_HOME/zsh"
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -76,6 +78,7 @@ plugins=(
 	npm
 	sudo
 	aliases
+        zsh-autosuggestions
 	zsh-syntax-highlighting
 )
 
@@ -111,3 +114,4 @@ bindkey -v
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+bindkey '^E' autosuggest-accept
