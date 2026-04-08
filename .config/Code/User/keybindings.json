@@ -142,12 +142,12 @@
     {
         "command": "search.action.focusPreviousSearchResult",
         "key": "ctrl+p",
-        "when": "searchViewletVisible"
+        "when": "searchViewletVisible && !inQuickOpen"
     },
     {
         "command": "search.action.focusNextSearchResult",
         "key": "ctrl+n",
-        "when": "searchViewletVisible"
+        "when": "searchViewletVisible && !inQuickOpen"
     },
     {
         "args": {
