@@ -20,7 +20,6 @@
     },
     "diffEditor.ignoreTrimWhitespace": true,
     "chat.viewSessions.orientation": "stacked",
-    "workbench.colorTheme": "Vim Dark Hard",
     "vim.hlsearch": true, // Highlight search matches
     "vim.useSystemClipboard": true, // Copy/paste to system clipboard
     "vim.incsearch": true, // Incremental search
