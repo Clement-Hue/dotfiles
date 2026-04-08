@@ -125,6 +125,11 @@
         "when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
     },
     {
+        "command": "workbench.action.findInFiles",
+        "key": "space f g",
+        "when": "(vim.mode == 'Visual' || vim.mode == 'VisualLine') && editorTextFocus"
+    },
+    {
         "command": "search.action.focusPreviousSearchResult",
         "key": "ctrl+p",
         "when": "searchViewletVisible"
