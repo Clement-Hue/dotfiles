@@ -130,6 +130,16 @@
         "when": "(vim.mode == 'Visual' || vim.mode == 'VisualLine') && editorTextFocus"
     },
     {
+        "command": "workbench.action.gotoSymbol",
+        "key": "space f s",
+        "when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
+    },
+    {
+        "command": "workbench.action.showAllSymbols",
+        "key": "space f w",
+        "when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
+    },
+    {
         "command": "search.action.focusPreviousSearchResult",
         "key": "ctrl+p",
         "when": "searchViewletVisible"
