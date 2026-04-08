@@ -45,11 +45,8 @@ return {
 		pickers = {
 		  buffers = {
 		    mappings = {
-		      i = {
-			["<C-c>"] = actions.delete_buffer,  -- close buffer in insert mode
-		      },
 		      n = {
-			["<C-c>"] = actions.delete_buffer,  -- close buffer in normal mode
+				["d"] = actions.delete_buffer,
 		      },
 		    },
 		  },
