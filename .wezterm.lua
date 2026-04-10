@@ -56,9 +56,6 @@ return {
     { key = "v", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
     { key = "h", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
 
-    -- Pane resize: Leader+r, then hjkl repeatedly, Escape/q to exit
-    { key = "r", mods = "LEADER", action = act.ActivateKeyTable({ name = "resize_pane", one_shot = false }) },
-
     -- Close pane (like :q)
     { key = "q", mods = "LEADER", action = act.CloseCurrentPane({ confirm = true }) },
 
@@ -71,6 +68,8 @@ return {
     { key = "n", mods = "LEADER", action = act.ActivateTabRelative(1) },
     { key = "p", mods = "LEADER", action = act.ActivateTabRelative(-1) },
 
+    -- fullscreen
+    { key = "Enter", mods = "ALT", action = wezterm.action.ToggleFullScreen, },
     -- Jump to tab by number (AZERTY: numbers need Shift)
     { key = "mapped:1", mods = "LEADER|SHIFT", action = act.ActivateTab(0) },
     { key = "mapped:2", mods = "LEADER|SHIFT", action = act.ActivateTab(1) },
@@ -122,17 +121,5 @@ return {
     { key = "=", mods = "CTRL", action = act.IncreaseFontSize },
     { key = "-", mods = "CTRL", action = act.DecreaseFontSize },
     { key = "0", mods = "CTRL", action = act.ResetFontSize },
-  },
-
-  key_tables = {
-    -- Resize mode: Leader+r, then use hjkl repeatedly, Escape to exit
-    resize_pane = {
-      { key = "h", action = act.AdjustPaneSize({ "Left", 2 }) },
-      { key = "j", action = act.AdjustPaneSize({ "Down", 2 }) },
-      { key = "k", action = act.AdjustPaneSize({ "Up", 2 }) },
-      { key = "l", action = act.AdjustPaneSize({ "Right", 2 }) },
-      { key = "Escape", action = "PopKeyTable" },
-      { key = "q", action = "PopKeyTable" },
-    },
   },
 }
