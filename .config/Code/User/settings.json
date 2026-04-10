@@ -24,15 +24,12 @@
     "vim.useSystemClipboard": true, // Copy/paste to system clipboard
     "vim.incsearch": true, // Incremental search
     "vim.statusBarColorControl" : true,
-    "vim.handleKeys": {
-        "<C-f>": false,
-        "<C-a>": false,
-    },
+    "editor.smoothScrolling": true,
     "workbench.colorCustomizations": {
         "statusBar.background": "#005f5f",
         "statusBar.noFolderBackground": "#005f5f",
         "statusBar.debuggingBackground": "#005f5f",
         "statusBar.foreground": "#ffffff",
         "statusBar.debuggingForeground": "#ffffff"
-    }
+    },
 }

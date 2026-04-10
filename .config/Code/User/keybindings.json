@@ -219,6 +219,14 @@
     },
     {
         "args": {
+            "query": "Can you simplify this code #selection"
+        },
+        "command": "workbench.action.chat.open",
+        "key": "space c s",
+        "when": "vim.mode == 'VisualLine' && editorTextFocus"
+    },
+    {
+        "args": {
             "query": "Can you review this code #selection"
         },
         "command": "workbench.action.chat.open",
