@@ -6,8 +6,7 @@ local keymap = vim.keymap.set
 keymap("n", "<leader>sh", "<cmd>split<CR>")
 keymap("n", "<leader>sv", "<cmd>vsplit<CR>")
 
-keymap("n", "<Tab>", "<cmd>tabnext<CR>", { desc = "Next tab" })
-keymap("n", "<S-Tab>", "<cmd>tabprevious<CR>", { desc = "Previous tab" })
+
 keymap("n", "<leader>to", "<cmd>tabonly<CR>", { desc = "Close other tabs" })
 keymap("n", "<leader>wo", "<cmd>only<CR>", { desc = "Close other windows" })
 

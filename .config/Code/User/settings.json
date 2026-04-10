@@ -32,4 +32,5 @@
         "statusBar.foreground": "#ffffff",
         "statusBar.debuggingForeground": "#ffffff"
     },
+    "workbench.colorTheme": "Dark Modern",
 }
