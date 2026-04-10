@@ -3,8 +3,8 @@ local keymap = vim.keymap.set
 -- Ctrl+h/j/k/l navigation handled by smart-splits.nvim (supports wezterm panes)
 
 -- Split window (horizontal & vertical)
-keymap("n", "<leader>sh", "<cmd>split<CR>")
-keymap("n", "<leader>sv", "<cmd>vsplit<CR>")
+keymap("n", "<leader>sh", "<cmd>split<CR>", { desc = "Horizontal split" })
+keymap("n", "<leader>sv", "<cmd>vsplit<CR>", { desc = "Vertical split" })
 
 
 keymap("n", "<leader>to", "<cmd>tabonly<CR>", { desc = "Close other tabs" })

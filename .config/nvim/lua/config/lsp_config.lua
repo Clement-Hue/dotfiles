@@ -1,12 +1,11 @@
-local function format_on_save(bufnr)
-  vim.api.nvim_create_autocmd("BufWritePre", {
-    group = vim.api.nvim_create_augroup("LspFormatOnSave_" .. bufnr, { clear = true }),
-    buffer = bufnr,
-    callback = function()
-      vim.lsp.buf.format({ bufnr = bufnr })
-    end,
-  })
-end
+-- Format on save (only if an LSP client supports formatting)
+vim.api.nvim_create_autocmd("BufWritePre", {
+  callback = function(args)
+    if #vim.lsp.get_clients({ bufnr = args.buf, method = "textDocument/formatting" }) > 0 then
+      vim.lsp.buf.format({ bufnr = args.buf })
+    end
+  end,
+})
 
 -- LSP keymaps on attach
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -25,7 +24,5 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("<leader>d", vim.diagnostic.open_float, "Line diagnostics")
     map("[d", vim.diagnostic.goto_prev, "Previous diagnostic")
     map("]d", vim.diagnostic.goto_next, "Next diagnostic")
-
-    format_on_save(args.buf)
   end,
 })

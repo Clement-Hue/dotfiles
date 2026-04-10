@@ -53,52 +53,56 @@ return {
 
   keys = {
     -- Splits (vim-style: v = vertical like :vsplit, s = horizontal like :split)
-    { key = "v", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-    { key = "h", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
+    { key = "v",          mods = "LEADER",       action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+    { key = "h",          mods = "LEADER",       action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
 
     -- Close pane (like :q)
-    { key = "q", mods = "LEADER", action = act.CloseCurrentPane({ confirm = true }) },
+    { key = "q",          mods = "LEADER",       action = act.CloseCurrentPane({ confirm = true }) },
 
     -- Zoom/toggle pane fullscreen (like tmux z)
-    { key = "z", mods = "LEADER", action = act.TogglePaneZoomState },
+    { key = "z",          mods = "LEADER",       action = act.TogglePaneZoomState },
 
     -- Tabs
-    { key = "c", mods = "LEADER", action = act.SpawnTab("CurrentPaneDomain") },
-    { key = "x", mods = "LEADER", action = act.CloseCurrentTab({ confirm = true }) },
-    { key = "n", mods = "LEADER", action = act.ActivateTabRelative(1) },
-    { key = "p", mods = "LEADER", action = act.ActivateTabRelative(-1) },
+    { key = "c",          mods = "LEADER",       action = act.SpawnTab("CurrentPaneDomain") },
+    { key = "x",          mods = "LEADER",       action = act.CloseCurrentTab({ confirm = true }) },
+    { key = "n",          mods = "LEADER",       action = act.ActivateTabRelative(1) },
+    { key = "p",          mods = "LEADER",       action = act.ActivateTabRelative(-1) },
 
     -- fullscreen
-    { key = "Enter", mods = "ALT", action = wezterm.action.ToggleFullScreen, },
+    { key = "Enter",      mods = "ALT",          action = wezterm.action.ToggleFullScreen, },
     -- Jump to tab by number (AZERTY: numbers need Shift)
-    { key = "mapped:1", mods = "LEADER|SHIFT", action = act.ActivateTab(0) },
-    { key = "mapped:2", mods = "LEADER|SHIFT", action = act.ActivateTab(1) },
-    { key = "mapped:3", mods = "LEADER|SHIFT", action = act.ActivateTab(2) },
-    { key = "mapped:4", mods = "LEADER|SHIFT", action = act.ActivateTab(3) },
-    { key = "mapped:5", mods = "LEADER|SHIFT", action = act.ActivateTab(4) },
-    { key = "mapped:6", mods = "LEADER|SHIFT", action = act.ActivateTab(5) },
-    { key = "mapped:7", mods = "LEADER|SHIFT", action = act.ActivateTab(6) },
-    { key = "mapped:8", mods = "LEADER|SHIFT", action = act.ActivateTab(7) },
-    { key = "mapped:9", mods = "LEADER|SHIFT", action = act.ActivateTab(8) },
+    { key = "mapped:1",   mods = "LEADER|SHIFT", action = act.ActivateTab(0) },
+    { key = "mapped:2",   mods = "LEADER|SHIFT", action = act.ActivateTab(1) },
+    { key = "mapped:3",   mods = "LEADER|SHIFT", action = act.ActivateTab(2) },
+    { key = "mapped:4",   mods = "LEADER|SHIFT", action = act.ActivateTab(3) },
+    { key = "mapped:5",   mods = "LEADER|SHIFT", action = act.ActivateTab(4) },
+    { key = "mapped:6",   mods = "LEADER|SHIFT", action = act.ActivateTab(5) },
+    { key = "mapped:7",   mods = "LEADER|SHIFT", action = act.ActivateTab(6) },
+    { key = "mapped:8",   mods = "LEADER|SHIFT", action = act.ActivateTab(7) },
+    { key = "mapped:9",   mods = "LEADER|SHIFT", action = act.ActivateTab(8) },
 
     -- Move tab left/right
-    { key = "LeftArrow", mods = "LEADER", action = act.MoveTabRelative(-1) },
-    { key = "RightArrow", mods = "LEADER", action = act.MoveTabRelative(1) },
+    { key = "LeftArrow",  mods = "LEADER",       action = act.MoveTabRelative(-1) },
+    { key = "RightArrow", mods = "LEADER",       action = act.MoveTabRelative(1) },
 
     -- Rename tab (like tmux ,)
-    { key = ",", mods = "LEADER", action = act.PromptInputLine({
-      description = "Tab name:",
-      action = wezterm.action_callback(function(window, _, line)
-        if line then window:active_tab():set_title(line) end
-      end),
-    })},
+    {
+      key = ",",
+      mods = "LEADER",
+      action = act.PromptInputLine({
+        description = "Tab name:",
+        action = wezterm.action_callback(function(window, _, line)
+          if line then window:active_tab():set_title(line) end
+        end),
+      })
+    },
 
     -- Copy mode (vim-like visual selection, Leader+V for visual)
-    { key = "Space", mods = "LEADER", action = act.ActivateCopyMode },
+    { key = "Space",    mods = "LEADER",       action = act.ActivateCopyMode },
 
     -- Quick scroll (behind leader to avoid Neovim Ctrl+u/d conflict)
-    { key = "u", mods = "LEADER", action = act.ScrollByPage(-0.5) },
-    { key = "d", mods = "LEADER", action = act.ScrollByPage(0.5) },
+    { key = "u",        mods = "LEADER",       action = act.ScrollByPage(-0.5) },
+    { key = "d",        mods = "LEADER",       action = act.ScrollByPage(0.5) },
 
     -- Search (like / in vim, AZERTY: / needs Shift)
     { key = "mapped:/", mods = "LEADER|SHIFT", action = act.Search("CurrentSelectionOrEmptyString") },
