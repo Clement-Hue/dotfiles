@@ -5,15 +5,21 @@ return {
       "nvim-neotest/nvim-nio",
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
-      -- adapters
       "nvim-neotest/neotest-jest",
       "zidhuss/neotest-minitest",
       "olimorris/neotest-rspec",
       "nvim-neotest/neotest-python",
     },
+    keys = {
+      { "<leader>nt", function() require("neotest").run.run() end, desc = "Test nearest" },
+      { "<leader>nf", function() require("neotest").run.run(vim.fn.expand("%")) end, desc = "Test file" },
+      { "<leader>ns", function() require("neotest").run.run(vim.fn.getcwd()) end, desc = "Test suite" },
+      { "<leader>nl", function() require("neotest").run.run_last() end, desc = "Test last" },
+      { "<leader>no", function() require("neotest").output_panel.toggle() end, desc = "Toggle output panel" },
+      { "<leader>nS", function() require("neotest").summary.toggle() end, desc = "Toggle summary" },
+    },
     config = function()
-      local neotest = require("neotest")
-      neotest.setup({
+      require("neotest").setup({
         adapters = {
           require("neotest-jest"),
           require("neotest-minitest"),
@@ -68,14 +74,6 @@ return {
           open = "vsplit | wincmd L",
         },
       })
-
-      local keymap = vim.keymap.set
-      keymap("n", "<leader>nt", function() neotest.run.run() end, { desc = "Test nearest" })
-      keymap("n", "<leader>nf", function() neotest.run.run(vim.fn.expand("%")) end, { desc = "Test file" })
-      keymap("n", "<leader>ns", function() neotest.run.run(vim.fn.getcwd()) end, { desc = "Test suite" })
-      keymap("n", "<leader>nl", function() neotest.run.run_last() end, { desc = "Test last" })
-      keymap("n", "<leader>no", function() neotest.output_panel.toggle() end, { desc = "Toggle output panel" })
-      keymap("n", "<leader>nS", function() neotest.summary.toggle() end, { desc = "Toggle summary" })
     end,
   },
 }
