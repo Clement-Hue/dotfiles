@@ -5,6 +5,7 @@ return {
       "nvim-neotest/nvim-nio",
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
+      -- Adapters
       "nvim-neotest/neotest-jest",
       "zidhuss/neotest-minitest",
       "olimorris/neotest-rspec",
