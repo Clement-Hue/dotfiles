@@ -5,6 +5,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+      "nvim-telescope/telescope-ui-select.nvim",
     },
     keys = {
       { "gr",               "<cmd>Telescope lsp_references<cr>",        nowait = true,                   desc = "LSP references" },
@@ -56,14 +57,7 @@ return {
         },
       })
       require("telescope").load_extension("fzf")
+      require("telescope").load_extension("ui-select")
     end
   },
-  {
-    "nvim-telescope/telescope-ui-select.nvim",
-    event = "VeryLazy",
-    dependencies = "nvim-telescope/telescope.nvim",
-    config = function()
-      require("telescope").load_extension("ui-select")
-    end,
-  }
 }
