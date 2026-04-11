@@ -11,7 +11,8 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.undofile = true
 vim.opt.scrolloff = 8
-vim.opt.undofile = true
+vim.opt.termguicolors = true
+vim.opt.updatetime = 300
 
 vim.opt.autoindent = true
 vim.opt.breakindent = true

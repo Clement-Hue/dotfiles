@@ -54,8 +54,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("<leader>ca", vim.lsp.buf.code_action, "Code action")
     map("<leader>rn", vim.lsp.buf.rename, "Rename symbol")
     map("<leader>d", vim.diagnostic.open_float, "Line diagnostics")
-    map("[d", vim.diagnostic.goto_prev, "Previous diagnostic")
-    map("]d", vim.diagnostic.goto_next, "Next diagnostic")
+    map("[d", function() vim.diagnostic.jump({ count = -1 }) end, "Previous diagnostic")
+    map("]d", function() vim.diagnostic.jump({ count = 1 }) end, "Next diagnostic")
 
     -- Toggle inlay hints
     map("<leader>ih", function()

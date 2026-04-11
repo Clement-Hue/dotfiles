@@ -7,7 +7,7 @@ return {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
     keys = {
-      { "gr",               "<cmd>Telescope lsp_references<cr>", nowait = true, desc = "LSP references" },
+      { "gr",               "<cmd>Telescope lsp_references<cr>",        nowait = true,                   desc = "LSP references" },
       { "<leader>ff",       "<cmd>Telescope find_files<cr>",            desc = "Find files" },
       { "<leader><leader>", "<cmd>Telescope find_files<cr>",            desc = "Find files" },
       { "<leader>fg",       "<cmd>Telescope live_grep<cr>",             desc = "Live grep" },
@@ -23,18 +23,18 @@ return {
       { "<leader>gc",       "<cmd>Telescope git_commits<cr>",           desc = "Git commits" },
       { "<leader>gb",       "<cmd>Telescope git_branches<cr>",          desc = "Git branches" },
     },
-    opts = function()
+    config = function()
       local actions = require("telescope.actions")
       local common = {
         -- navigation
         ["<C-j>"] = actions.move_selection_next,
         ["<C-k>"] = actions.move_selection_previous,
         -- open
-        ["<C-t>"] = actions.select_tab,  -- new tab
+        ["<C-t>"] = actions.select_tab,        -- new tab
         ["<C-h>"] = actions.select_horizontal, -- horizontal split
-        ["<C-v>"] = actions.select_vertical, -- vertical split
+        ["<C-v>"] = actions.select_vertical,   -- vertical split
       }
-      return {
+      require("telescope").setup({
         defaults = {
           layout_strategy = "vertical",
           layout_config = {
@@ -54,7 +54,8 @@ return {
             },
           },
         },
-      }
+      })
+      require("telescope").load_extension("fzf")
     end
   },
   {
