@@ -48,7 +48,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("gd", vim.lsp.buf.definition, "Go to definition")
     map("gD", vim.lsp.buf.declaration, "Go to declaration")
     map("gi", vim.lsp.buf.implementation, "Go to implementation")
-    map("gt", vim.lsp.buf.type_definition, "Go to type definition")
+    map("gy", vim.lsp.buf.type_definition, "Go to type definition")
     map("K", vim.lsp.buf.hover, "Hover documentation")
     map("<C-k>", vim.lsp.buf.signature_help, "Signature help")
     map("<leader>ca", vim.lsp.buf.code_action, "Code action")
@@ -61,5 +61,25 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("<leader>ih", function()
       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = args.buf }), { bufnr = args.buf })
     end, "Toggle inlay hints")
+  end,
+})
+
+-- LSP progress notifications (via snacks.notifier)
+vim.api.nvim_create_autocmd("LspProgress", {
+  ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+  callback = function(ev)
+    local value = ev.data.params.value
+    if type(value) ~= "table" then
+      return
+    end
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    local name = client and client.name or "LSP"
+    if value.kind == "end" then
+      vim.notify(name .. ": " .. "Initialization complete", vim.log.levels.INFO, { id = "lsp_progress" })
+    else
+      local msg = value.title or ""
+      if value.message then msg = msg .. " " .. value.message end
+      vim.notify(msg, vim.log.levels.INFO, { id = "lsp_progress", title = name })
+    end
   end,
 })
