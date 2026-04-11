@@ -2,7 +2,7 @@ return {
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
-    event = "InsertEnter",
+    event = { "BufReadPre", "BufNewFile" },
     opts = {
       suggestion = {
         enabled = true,

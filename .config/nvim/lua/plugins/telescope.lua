@@ -7,6 +7,7 @@ return {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
     keys = {
+      { "gr",               "<cmd>Telescope lsp_references<cr>", nowait = true, desc = "LSP references" },
       { "<leader>ff",       "<cmd>Telescope find_files<cr>",            desc = "Find files" },
       { "<leader><leader>", "<cmd>Telescope find_files<cr>",            desc = "Find files" },
       { "<leader>fg",       "<cmd>Telescope live_grep<cr>",             desc = "Live grep" },
@@ -24,25 +25,24 @@ return {
     },
     opts = function()
       local actions = require("telescope.actions")
+      local common = {
+        -- navigation
+        ["<C-j>"] = actions.move_selection_next,
+        ["<C-k>"] = actions.move_selection_previous,
+        -- open
+        ["<C-t>"] = actions.select_tab,  -- new tab
+        ["<C-h>"] = actions.select_horizontal, -- horizontal split
+        ["<C-v>"] = actions.select_vertical, -- vertical split
+      }
       return {
         defaults = {
+          layout_strategy = "vertical",
+          layout_config = {
+            preview_cutoff = 0,
+          },
           mappings = {
-            i = {
-              -- navigation
-              ["<C-j>"] = actions.move_selection_next,
-              ["<C-k>"] = actions.move_selection_previous,
-              -- open
-              ["<C-t>"] = actions.select_tab,  -- new tab
-              ["<C-h>"] = actions.select_horizontal, -- horizontal split
-              ["<C-v>"] = actions.select_vertical, -- vertical split
-            },
-            n = {
-              ["<C-j>"] = actions.move_selection_next,
-              ["<C-k>"] = actions.move_selection_previous,
-              ["<C-t>"] = actions.select_tab,
-              ["<C-h>"] = actions.select_horizontal,
-              ["<C-v>"] = actions.select_vertical,
-            },
+            i = common,
+            n = common,
           },
         },
         pickers = {
