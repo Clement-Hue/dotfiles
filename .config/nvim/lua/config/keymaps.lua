@@ -16,3 +16,5 @@ keymap("x", "J", ":move '>+1<CR>gv=gv", { desc = "Move lines down" })
 keymap("n", "<leader>tt", "<C-w>T", { desc = "Move current split to new tab" })
 keymap("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "New tab" })
 
+keymap("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+
