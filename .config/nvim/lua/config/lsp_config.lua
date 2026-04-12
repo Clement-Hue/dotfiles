@@ -45,15 +45,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
     end
 
-    map("gd", vim.lsp.buf.definition, "Go to definition")
     map("gD", vim.lsp.buf.declaration, "Go to declaration")
-    map("gi", vim.lsp.buf.implementation, "Go to implementation")
-    map("gy", vim.lsp.buf.type_definition, "Go to type definition")
     map("K", vim.lsp.buf.hover, "Hover documentation")
     map("<C-k>", vim.lsp.buf.signature_help, "Signature help")
     map("<leader>ca", vim.lsp.buf.code_action, "Code action")
     map("<leader>rn", vim.lsp.buf.rename, "Rename symbol")
-    map("<leader>d", vim.diagnostic.open_float, "Line diagnostics")
+    map("gl", vim.diagnostic.open_float, "Line diagnostics")
     map("[d", function() vim.diagnostic.jump({ count = -1 }) end, "Previous diagnostic")
     map("]d", function() vim.diagnostic.jump({ count = 1 }) end, "Next diagnostic")
 

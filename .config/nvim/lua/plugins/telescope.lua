@@ -9,6 +9,11 @@ return {
     },
     keys = {
       { "gr",               "<cmd>Telescope lsp_references<cr>",        nowait = true,                   desc = "LSP references" },
+      { "gd",               "<cmd>Telescope lsp_definitions<cr>",       desc = "LSP definition" },
+      { "gi",               "<cmd>Telescope lsp_implementations<cr>",   desc = "LSP implementation" },
+      { "gy",               "<cmd>Telescope lsp_type_definitions<cr>",  desc = "LSP type definition" },
+      { "gai",              "<cmd>Telescope lsp_incoming_calls<cr>",    desc = "LSP incoming calls" },
+      { "gao",              "<cmd>Telescope lsp_outgoing_calls<cr>",    desc = "LSP outgoing calls" },
       { "<leader>ff",       "<cmd>Telescope find_files<cr>",            desc = "Find files" },
       { "<leader><leader>", "<cmd>Telescope find_files<cr>",            desc = "Find files" },
       { "<leader>fg",       "<cmd>Telescope live_grep<cr>",             desc = "Live grep" },
@@ -52,6 +57,9 @@ return {
               n = {
                 ["d"] = actions.delete_buffer,
               },
+              i = {
+                ["<C-x>"] = actions.delete_buffer,
+              }
             },
           },
         },
