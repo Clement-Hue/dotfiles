@@ -12,13 +12,13 @@ return {
       "nvim-neotest/neotest-python",
     },
     keys = {
-      { "<leader>nt", function() require("neotest").run.run() end, desc = "Test nearest" },
-      { "<leader>nf", function() require("neotest").run.run(vim.fn.expand("%")) end, desc = "Test file" },
-      { "<leader>ns", function() require("neotest").run.run(vim.fn.getcwd()) end, desc = "Test suite" },
-      { "<leader>nl", function() require("neotest").run.run_last() end, desc = "Test last" },
+      { "<leader>nt", function() require("neotest").run.run() end,                     desc = "Test nearest" },
+      { "<leader>nf", function() require("neotest").run.run(vim.fn.expand("%")) end,   desc = "Test file" },
+      { "<leader>ns", function() require("neotest").run.run(vim.fn.getcwd()) end,      desc = "Test suite" },
+      { "<leader>nl", function() require("neotest").run.run_last() end,                desc = "Test last" },
       { "<leader>nd", function() require("neotest").run.run({ strategy = "dap" }) end, desc = "Debug nearest test" },
-      { "<leader>no", function() require("neotest").output_panel.toggle() end, desc = "Toggle output panel" },
-      { "<leader>nS", function() require("neotest").summary.toggle() end, desc = "Toggle summary" },
+      { "<leader>no", function() require("neotest").output_panel.toggle() end,         desc = "Toggle output panel" },
+      { "<leader>nS", function() require("neotest").summary.toggle() end,              desc = "Toggle summary" },
     },
     config = function()
       require("neotest").setup({

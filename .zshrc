@@ -127,3 +127,4 @@ bindkey '^R' history-incremental-search-backward
 
 # opencode
 export PATH=/home/clement/.opencode/bin:$PATH
+eval "$(rbenv init -)"

@@ -84,22 +84,12 @@ return {
         },
       }
 
-      -- Ruby (requires 'debug' gem: gem install debug)
-      dap.adapters.ruby = function(callback, config)
-        callback({
-          type = "server",
-          host = "127.0.0.1",
-          port = "${port}",
-          executable = {
-            command = "bundle",
-            args = {
-              "exec", "rdbg", "-n", "--open", "--port", "${port}",
-              "-c", "--", "bundle", "exec", config.command, config.script,
-            },
-          },
-        })
-      end
-
+      -- Ruby (requires 'debug' gem in Gemfile)
+      dap.adapters.ruby = {
+        type = "executable",
+        command = "bundle",
+        args = { "exec", "rdbg", "--open", "--command", "--" },
+      }
       -----------------------------------------------------------------------
       -- Configurations
       -----------------------------------------------------------------------
@@ -123,24 +113,31 @@ return {
           },
         }
       end
-
-      -- Ruby
       dap.configurations.ruby = {
         {
           type = "ruby",
-          name = "Debug current file",
-          request = "attach",
-          localfs = true,
-          command = "ruby",
-          script = "${file}",
+          name = "Run Minitest file",
+          request = "launch",
+          program = "bundle",
+          args = { "exec", "ruby", "${file}" },
+          cwd = "${workspaceFolder}",
         },
+
         {
           type = "ruby",
-          name = "Run current spec file",
-          request = "attach",
-          localfs = true,
-          command = "rspec",
-          script = "${file}",
+          name = "Run Minitest line (Neotest friendly)",
+          request = "launch",
+          program = "bundle",
+          args = function()
+            return {
+              "exec",
+              "ruby",
+              "${file}",
+              "-n",
+              "/" .. vim.fn.expand("<cword>") .. "/",
+            }
+          end,
+          cwd = "${workspaceFolder}",
         },
       }
     end,
