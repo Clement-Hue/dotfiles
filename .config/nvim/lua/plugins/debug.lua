@@ -18,9 +18,9 @@ return {
             },
             {
               elements = {
-                { id = "scopes",  size = 0.5 },
-                { id = "repl",    size = 0.25 },
-                { id = "console", size = 0.25 },
+                { id = "scopes",  size = 0.4 },
+                { id = "repl",    size = 0.4 },
+                { id = "console", size = 0.2 },
               },
               size = 0.3,
               position = "bottom",
@@ -45,7 +45,7 @@ return {
       { "<leader>dq",    function() require("dap").terminate() end,                                            desc = "Terminate" },
       { "<leader>dr",    function() require("dap").restart() end,                                              desc = "Restart" },
       { "<leader>du",    function() require("dapui").toggle() end,                                             desc = "Toggle DAP UI" },
-      { "<leader>de",    function() require("dapui").eval() end,                                               desc = "Eval expression",       mode = { "n", "v" } },
+      { "<leader>de",    function() require("dapui").eval(nil, { enter = true }) end,                          desc = "Eval expression",       mode = { "n", "v" } },
     },
 
     config = function()
@@ -84,12 +84,59 @@ return {
         },
       }
 
-      -- Ruby (requires 'debug' gem in Gemfile)
-      dap.adapters.ruby = {
-        type = "executable",
-        command = "bundle",
-        args = { "exec", "rdbg", "--open", "--command", "--" },
-      }
+      -- Ruby rdbg (requires 'debug' gem in Gemfile)
+      -- Launches rdbg with a Unix socket, then connects via DAP pipe transport.
+      dap.adapters.ruby = function(callback, config)
+        local sock_path = "/run/user/1001/rdbg-" .. vim.fn.getpid()
+        os.remove(sock_path)
+
+        local env_parts = {}
+        for k, v in pairs(config.env or {}) do
+          table.insert(env_parts, k .. "=" .. vim.fn.shellescape(v))
+        end
+        local env_prefix = #env_parts > 0 and table.concat(env_parts, " ") .. " " or ""
+
+        local cmd = env_prefix
+          .. "rdbg --command --open --stop-at-load"
+          .. " --sock-path=" .. sock_path
+          .. " -- bundle exec ruby "
+          .. (config.script or "bin/server.rb")
+
+        local stdout = vim.loop.new_pipe(false)
+        local stderr = vim.loop.new_pipe(false)
+
+        local handle
+        handle = vim.loop.spawn("bash", {
+          args = { "-l", "-c", cmd },
+          cwd = config.cwd or vim.fn.getcwd(),
+          detached = true,
+          stdio = { nil, stdout, stderr },
+        }, function(code)
+          if handle then handle:close() end
+          stdout:close()
+          stderr:close()
+          if code ~= 0 then
+            vim.schedule(function()
+              vim.notify("rdbg exited with code " .. code, vim.log.levels.WARN)
+            end)
+          end
+        end)
+
+        -- Forward stdout/stderr to DAP REPL so server logs are visible
+        local function forward(pipe)
+          pipe:read_start(function(_, data)
+            if data then
+              vim.schedule(function() require("dap.repl").append(data) end)
+            end
+          end)
+        end
+        forward(stdout)
+        forward(stderr)
+
+        vim.defer_fn(function()
+          callback({ type = "pipe", pipe = sock_path })
+        end, 2000)
+      end
       -----------------------------------------------------------------------
       -- Configurations
       -----------------------------------------------------------------------
@@ -116,28 +163,18 @@ return {
       dap.configurations.ruby = {
         {
           type = "ruby",
-          name = "Run Minitest file",
+          name = "Launch pacon server",
           request = "launch",
-          program = "bundle",
-          args = { "exec", "ruby", "${file}" },
-          cwd = "${workspaceFolder}",
-        },
-
-        {
-          type = "ruby",
-          name = "Run Minitest line (Neotest friendly)",
-          request = "launch",
-          program = "bundle",
-          args = function()
-            return {
-              "exec",
-              "ruby",
-              "${file}",
-              "-n",
-              "/" .. vim.fn.expand("<cword>") .. "/",
-            }
-          end,
-          cwd = "${workspaceFolder}",
+          script = "bin/server.rb",
+          useBundler = true,
+          localfs = true,
+          env = {
+            PACON2_ENVIRONMENT = "development",
+            PACON2_HTTP_ENABLED = "enabled",
+            PACON2_AMQP_ENABLED = "disabled",
+            PACON2_HIBERNATUS_ENABLED = "enabled",
+            PACON2_HTTP_PORT = "8080",
+          },
         },
       }
     end,
