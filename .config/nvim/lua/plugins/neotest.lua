@@ -24,7 +24,14 @@ return {
       require("neotest").setup({
         adapters = {
           require("neotest-jest"),
-          require("neotest-minitest"),
+          require("neotest-minitest")({
+            test_cmd = function()
+              return {
+                "bundle", "exec", "ruby", "-Itest",
+                "-e", "args=ARGV.map{|a|a==\"-v\"?\"--verbose\":a};f=args.shift;ARGV.replace(args);load f",
+              }
+            end,
+          }),
           require("neotest-rspec"),
           require("neotest-python"),
         },
