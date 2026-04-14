@@ -30,12 +30,15 @@ return {
       },
       signature = {
         enabled = true,
+        trigger = {
+          show_on_insert = true,
+        },
         window = {
           border = "rounded",
         },
       },
       sources = {
-        default = {  "lsp", "lazydev", "path", "snippets", "buffer" },
+        default = { "lsp", "lazydev", "path", "snippets", "buffer" },
         providers = {
           lazydev = {
             name = "LazyDev",

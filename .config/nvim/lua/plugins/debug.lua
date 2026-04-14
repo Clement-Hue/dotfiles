@@ -87,7 +87,8 @@ return {
       -- Ruby rdbg (requires 'debug' gem in Gemfile)
       -- Launches rdbg with a Unix socket, then connects via DAP pipe transport.
       dap.adapters.ruby = function(callback, config)
-        local sock_path = "/run/user/1001/rdbg-" .. vim.fn.getpid()
+        local runtime_dir = vim.fn.getenv("XDG_RUNTIME_DIR")
+        local sock_path = runtime_dir .. "/rdbg-" .. vim.fn.getpid()
         os.remove(sock_path)
 
         local env_parts = {}
@@ -97,10 +98,10 @@ return {
         local env_prefix = #env_parts > 0 and table.concat(env_parts, " ") .. " " or ""
 
         local cmd = env_prefix
-          .. "rdbg --command --open --stop-at-load"
-          .. " --sock-path=" .. sock_path
-          .. " -- bundle exec ruby "
-          .. (config.script or "bin/server.rb")
+            .. "rdbg --command --open --stop-at-load"
+            .. " --sock-path=" .. sock_path
+            .. " -- bundle exec ruby "
+            .. config.script
 
         local stdout = vim.loop.new_pipe(false)
         local stderr = vim.loop.new_pipe(false)
@@ -160,13 +161,21 @@ return {
           },
         }
       end
+
       dap.configurations.ruby = {
+        {
+          type = "ruby",
+          name = "debug current file",
+          request = "launch",
+          localfs = true,
+          command = "ruby",
+          script = "${file}",
+        },
         {
           type = "ruby",
           name = "Launch pacon server",
           request = "launch",
           script = "bin/server.rb",
-          useBundler = true,
           localfs = true,
           env = {
             PACON2_ENVIRONMENT = "development",
