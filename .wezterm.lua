@@ -97,7 +97,7 @@ return {
       })
     },
 
-    -- Copy mode (vim-like visual selection, Leader+V for visual)
+    -- Copy mode (vim-like visual selection, Leader+Space for visual)
     { key = "Space",    mods = "LEADER",       action = act.ActivateCopyMode },
 
     -- Quick scroll (behind leader to avoid Neovim Ctrl+u/d conflict)

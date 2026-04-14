@@ -80,3 +80,32 @@ vim.api.nvim_create_autocmd("LspProgress", {
     end
   end,
 })
+
+-- LSP request notifications (show "Searching..." while waiting for a response)
+local lsp_method_labels = {
+  ["textDocument/references"] = "References",
+  ["textDocument/definition"] = "Definition",
+  ["textDocument/implementation"] = "Implementation",
+  ["textDocument/typeDefinition"] = "Type definition",
+  ["callHierarchy/incomingCalls"] = "Incoming calls",
+  ["callHierarchy/outgoingCalls"] = "Outgoing calls",
+}
+
+vim.api.nvim_create_autocmd("LspRequest", {
+  callback = function(args)
+    local request = args.data.request
+    local label = lsp_method_labels[request.method]
+    if not label then
+      return
+    end
+
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    local name = client and client.name or "LSP"
+
+    if request.type == "pending" then
+      vim.notify(label .. ": Searching...", vim.log.levels.INFO, { id = "lsp_request", title = name })
+    elseif request.type == "complete" then
+      vim.notify(label .. ": Done", vim.log.levels.INFO, { id = "lsp_request", title = name })
+    end
+  end,
+})

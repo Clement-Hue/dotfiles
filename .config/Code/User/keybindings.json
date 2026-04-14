@@ -55,12 +55,12 @@
     },
     {
         "command": "workbench.action.splitEditor",
-        "key": "space s h",
+        "key": "space h",
         "when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
     },
     {
         "command": "workbench.action.splitEditorDown",
-        "key": "space s v",
+        "key": "space v",
         "when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
     },
     // Coding
