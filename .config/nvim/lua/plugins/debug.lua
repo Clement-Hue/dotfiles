@@ -114,8 +114,8 @@ return {
           stdio = { nil, stdout, stderr },
         }, function(code)
           if handle then handle:close() end
-          stdout:close()
-          stderr:close()
+          if stdout then stdout:close() end
+          if stderr then stderr:close() end
           if code ~= 0 then
             vim.schedule(function()
               vim.notify("rdbg exited with code " .. code, vim.log.levels.WARN)
@@ -123,16 +123,21 @@ return {
           end
         end)
 
-        -- Forward stdout/stderr to DAP REPL so server logs are visible
-        local function forward(pipe)
+        -- Forward stdout/stderr to DAP console
+        local function forward(pipe, category)
           pipe:read_start(function(_, data)
             if data then
-              vim.schedule(function() require("dap.repl").append(data) end)
+              vim.schedule(function()
+                local session = dap.session()
+                if session then
+                  session:event_output({ category = category, output = data })
+                end
+              end)
             end
           end)
         end
-        forward(stdout)
-        forward(stderr)
+        forward(stdout, "stdout")
+        forward(stderr, "stderr")
 
         vim.defer_fn(function()
           callback({ type = "pipe", pipe = sock_path })
