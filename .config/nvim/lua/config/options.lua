@@ -10,6 +10,7 @@ vim.opt.cursorline = true
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.undofile = true
+vim.opt.exrc = true
 vim.opt.scrolloff = 8
 vim.opt.termguicolors = true
 vim.opt.updatetime = 300
