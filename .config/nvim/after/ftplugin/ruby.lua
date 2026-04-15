@@ -6,12 +6,13 @@
 
 vim.opt_local.suffixesadd:prepend(".rb")
 
--- Add lib/ as the primary lookup directory (matches $LOAD_PATH in this project)
--- Also add common top-level dirs and the project root itself
-vim.opt_local.path:append("lib")
-vim.opt_local.path:append("config")
-vim.opt_local.path:append("commands")
-vim.opt_local.path:append("test")
+-- Dynamically add top-level directories to path (mimics $LOAD_PATH discovery)
+local root = vim.fn.getcwd()
+for name, type in vim.fs.dir(root) do
+  if type == "directory" and not name:match("^%.") then
+    vim.opt_local.path:append(name)
+  end
+end
 
 -- includeexpr: handles transforming require arguments for gf
 -- Converts `require "pacon/base/foo"` -> looks up `pacon/base/foo` in path with .rb suffix
