@@ -38,12 +38,17 @@ return {
         },
       },
       sources = {
-        default = { "lsp", "lazydev", "path", "snippets", "buffer" },
+        default = { "lsp", "lazydev", "ruby_require", "path", "snippets", "buffer" },
         providers = {
           lazydev = {
             name = "LazyDev",
             module = "lazydev.integrations.blink",
             score_offset = 100,
+          },
+          ruby_require = {
+            name = "Ruby Require",
+            module = "ruby-require",
+            score_offset = 50,
           },
         },
       },
