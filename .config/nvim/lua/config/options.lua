@@ -13,6 +13,7 @@ vim.opt.undofile = true
 vim.opt.scrolloff = 8
 vim.opt.termguicolors = true
 vim.opt.updatetime = 300
+vim.o.confirm = true
 
 vim.opt.autoindent = true
 vim.opt.breakindent = true
