@@ -5,7 +5,6 @@
 local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
 
 local source = {}
-local AUTO_DETECT_PATHS = { "lib", "app", "config" }
 local DEFAULT_ROOT_MARKERS = { "Gemfile", ".git" }
 local EMPTY = { is_incomplete_forward = false, is_incomplete_backward = false, items = {} }
 
@@ -35,7 +34,7 @@ function source:get_load_paths(bufnr)
   if self._cache[root] then return self._cache[root] end
 
   local paths = {}
-  for _, rel in ipairs(self.opts.load_paths or AUTO_DETECT_PATHS) do
+  for _, rel in ipairs(vim.split(vim.o.path, ",")) do
     local abs = root .. "/" .. rel
     if vim.fn.isdirectory(abs) == 1 then paths[#paths + 1] = abs end
   end
@@ -67,7 +66,7 @@ function source:get_completions(context, callback)
 
   local base_dirs = req_type == "require_relative"
       and { vim.fn.expand(("#%d:p:h"):format(context.bufnr)) }
-    or self:get_load_paths(context.bufnr)
+      or self:get_load_paths(context.bufnr)
 
   local col = context.cursor[2]
   local edit_range = {

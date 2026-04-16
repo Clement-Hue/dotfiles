@@ -28,6 +28,36 @@ return {
         width = 35,
         mappings = {
           ["<C-r>"] = "noop",
+
+          ["yf"] = {
+            function(state)
+              local node = state.tree:get_node()
+              local name = node.name
+              vim.fn.setreg("+", name)
+              vim.notify("Copied filename: " .. name)
+            end,
+            desc = "Copy filename",
+          },
+
+          ["yp"] = {
+            function(state)
+              local node = state.tree:get_node()
+              local path = vim.fn.fnamemodify(node:get_id(), ":.")
+              vim.fn.setreg("+", path)
+              vim.notify("Copied relative path: " .. path)
+            end,
+            desc = "Copy relative path",
+          },
+
+          ["yP"] = {
+            function(state)
+              local node = state.tree:get_node()
+              local path = node:get_id()
+              vim.fn.setreg("+", path)
+              vim.notify("Copied absolute path: " .. path)
+            end,
+            desc = "Copy absolute path",
+          },
         },
       },
     },
