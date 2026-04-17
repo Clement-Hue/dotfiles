@@ -1,9 +1,23 @@
 return {
   {
     "zbirenbaum/copilot.lua",
+    dependencies = {
+      {
+        "copilotlsp-nvim/copilot-lsp",
+      },
+    },
     cmd = "Copilot",
     event = { "BufReadPre", "BufNewFile" },
     opts = {
+      nes = {
+        enabled = true,
+        auto_trigger = true,
+        keymap = {
+          accept_and_goto = "<M-y>",
+          accept = false,
+          dismiss = "<Esc>",
+        },
+      },
       suggestion = {
         enabled = true,
         auto_trigger = true,
