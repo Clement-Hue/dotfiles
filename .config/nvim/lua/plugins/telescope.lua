@@ -22,7 +22,7 @@ return {
       { "<leader>,",        "<cmd>Telescope buffers<cr>",               desc = "Buffers (Leader-Leader)" },
       { "<leader>fh",       "<cmd>Telescope help_tags<cr>",             desc = "Help tags" },
       { "<leader>fr",       "<cmd>Telescope oldfiles<cr>",              desc = "Recent files" },
-      { "<leader>fd",       "<cmd>Telescope diagnostics<cr>",             desc = "Diagnostics" },
+      { "<leader>fd",       "<cmd>Telescope diagnostics<cr>",           desc = "Diagnostics" },
       { "<leader>fs",       "<cmd>Telescope lsp_document_symbols<cr>",  desc = "Document symbols" },
       { "<leader>fw",       "<cmd>Telescope lsp_workspace_symbols<cr>", desc = "Workspace symbols" },
       { "<leader>gs",       "<cmd>Telescope git_status<cr>",            desc = "Git status" },

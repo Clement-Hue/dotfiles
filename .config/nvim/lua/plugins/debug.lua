@@ -30,7 +30,7 @@ return {
       },
       {
         "microsoft/vscode-js-debug",
-        build = "npm install --legacy-peer-deps --ignore-scripts && npx gulp dapDebugServer && git checkout -- .",
+        build = "npm install --legacy-peer-deps --ignore-scripts && npx gulp dapDebugServer ; git restore .",
       },
     },
 
