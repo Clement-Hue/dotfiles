@@ -7,6 +7,13 @@ return {
       keymap = {
         preset = "enter",
         ["<C-e>"] = { "hide", "show" },
+        ["<Tab>"] = {
+          "snippet_forward",
+          function()
+            return require("sidekick").nes_jump_or_apply()
+          end,
+          "fallback",
+        },
       },
       completion = {
         list = {

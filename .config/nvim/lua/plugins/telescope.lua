@@ -37,9 +37,15 @@ return {
         ["<C-k>"] = actions.move_selection_previous,
         -- open
         ["<C-t>"] = actions.select_tab,        -- new tab
-        ["<C-h>"] = actions.select_horizontal, -- horizontal split
+        ["<C-s>"] = actions.select_horizontal, -- horizontal split
         ["<C-v>"] = actions.select_vertical,   -- vertical split
       }
+      -- Send Telescope selection(s) to Sidekick AI CLI with <Alt-a>
+      local ok, _ = pcall(require, "sidekick")
+      if ok then
+        common["<a-a>"] = require("sidekick.cli.picker.telescope").send
+      end
+
       require("telescope").setup({
         defaults = {
           layout_strategy = "vertical",
