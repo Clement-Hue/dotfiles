@@ -61,6 +61,15 @@ return function(dap)
   end
 
   -----------------------------------------------------------------------
+  -- Adapter: attach to a running rdbg instance via TCP
+  -----------------------------------------------------------------------
+  dap.adapters.ruby_attach = {
+    type = "server",
+    host = "127.0.0.1",
+    port = 12345,
+  }
+
+  -----------------------------------------------------------------------
   -- Configurations
   -----------------------------------------------------------------------
   dap.configurations.ruby = {
@@ -71,6 +80,12 @@ return function(dap)
       localfs = true,
       command = "ruby",
       script = "${file}",
+    },
+    {
+      type = "ruby_attach",
+      name = "Attach to rdbg (port 12345)",
+      request = "attach",
+      localfs = true,
     },
     {
       type = "ruby",
