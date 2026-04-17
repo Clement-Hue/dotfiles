@@ -13,7 +13,7 @@ return {
         enabled = true,
         auto_trigger = true,
         keymap = {
-          accept_and_goto = "<M-y>",
+          accept_and_goto = "<C-y>",
           accept = false,
           dismiss = "<Esc>",
         },

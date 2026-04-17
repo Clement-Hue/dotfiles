@@ -1,5 +1,14 @@
 return {
   {
+    "akinsho/git-conflict.nvim",
+    version = "*",
+    event = "BufReadPre",
+    opts = {
+      default_mappings = true, -- co (ours), ct (theirs), cb (both), c0 (none), ]x/[x (navigate)
+      disable_diagnostics = false,
+    },
+  },
+  {
     "lewis6991/gitsigns.nvim",
     event = { "BufReadPre", "BufNewFile" },
     opts = {

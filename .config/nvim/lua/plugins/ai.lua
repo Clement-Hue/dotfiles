@@ -14,8 +14,44 @@ return {
       { "<leader>ci", "<cmd>CodeCompanion<cr>",            mode = { "n", "v" }, desc = "CodeCompanion Inline" },
     },
     opts = {
+      prompt_library = {
+        ["MR Summary"] = {
+          strategy = "chat",
+          description = "Generate a merge request summary in markdown",
+          opts = {
+            short_name = "mr",
+          },
+          prompts = {
+            {
+              role = "user",
+              content = function()
+                local diff = vim.fn.system("git diff dev...HEAD")
+                return string.format(
+                  [[Analyze the following git diff and generate a merge request description in markdown with:
+- **Summary**: what changed and why
+- **Problem** : what issue does this MR address
+- **Changes**: a bullet list of key changes
+
+```diff
+%s
+```]],
+                  diff
+                )
+              end,
+            },
+          },
+        },
+      },
       interactions = {
         chat = {
+          editor_context = {
+            ["buffer"] = {
+              opts = {
+                -- Always sync the buffer by sharing its "diff"
+                default_params = "diff",
+              },
+            },
+          },
           adapter = {
             name = "copilot_acp",
             model = "claude-opus-4.6",
