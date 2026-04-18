@@ -12,6 +12,40 @@ return {
       { "<leader>cn", "<cmd>CodeCompanionChat<cr>",        mode = { "n", "v" }, desc = "New CodeCompanion Chat" },
       { "<leader>ca", "<cmd>CodeCompanionChat Add<cr>",    mode = { "v" },      desc = "Add selection to Chat" },
       { "<leader>ci", "<cmd>CodeCompanion<cr>",            mode = { "n", "v" }, desc = "CodeCompanion Inline" },
+      -- CLI keymaps
+      {
+        "<leader>co",
+        function() require("codecompanion").toggle_cli() end,
+        mode = { "n", "v" },
+        desc = "Toggle Copilot CLI"
+      },
+      {
+        "<leader>cp",
+        function() require("codecompanion").cli({ prompt = true }) end,
+        mode = { "n", "v" },
+        desc = "Prompt Copilot CLI",
+      },
+      {
+        "<leader>cx",
+        function() require("codecompanion").cli("#{this}", { focus = false }) end,
+        mode = { "n", "v" },
+        desc = "Add context to Copilot CLI",
+      },
+      {
+        "<leader>cd",
+        function() require("codecompanion").cli("#{diagnostics} Can you fix these?", { focus = false, submit = true }) end,
+        mode = { "n" },
+        desc = "Send diagnostics to Copilot CLI",
+      },
+      {
+        "<leader>cT",
+        function()
+          require("codecompanion").cli("#{terminal} Sharing the output from the terminal. Can you fix it?",
+            { focus = false, submit = true })
+        end,
+        mode = { "n" },
+        desc = "Send terminal to Copilot CLI",
+      },
     },
     opts = {
       prompt_library = {
@@ -66,22 +100,18 @@ return {
               return string.format([[<prompt>%s</prompt>]], message)
             end,
           },
-          tools = {
-            -- Read-only tools: no approval needed
-            ["read_file"] = { opts = { require_approval_before = false } },
-            ["file_search"] = { opts = { require_approval_before = false } },
-            ["grep_search"] = { opts = { require_approval_before = false } },
-            ["get_diagnostics"] = { opts = { require_approval_before = false } },
-            ["get_changed_files"] = { opts = { require_approval_before = false } },
-            -- Write/execute tools: keep approval
-            ["run_command"] = { opts = { require_approval_before = true, require_cmd_approval = true } },
-            ["create_file"] = { opts = { require_approval_before = true } },
-            ["delete_file"] = { opts = { require_approval_before = true, allowed_in_yolo_mode = false } },
-            ["insert_edit_into_file"] = {
-              opts = {
-                require_approval_before = { buffer = true, file = true },
-                require_confirmation_after = true,
-              },
+        },
+        cli = {
+          agent = "copilot_cli",
+          opts = {
+            reload = true,
+            auto_insert = true,
+          },
+          agents = {
+            copilot_cli = {
+              cmd = "copilot",
+              args = {},
+              description = "GitHub Copilot CLI",
             },
           },
         },
