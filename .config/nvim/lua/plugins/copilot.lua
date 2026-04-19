@@ -15,7 +15,7 @@ return {
         keymap = {
           accept_and_goto = "<M-y>",
           accept = false,
-          dismiss = "<Esc>",
+          dismiss = "<Esc><Esc>",
         },
       },
       suggestion = {

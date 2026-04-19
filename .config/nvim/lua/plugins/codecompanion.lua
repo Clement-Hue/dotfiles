@@ -7,7 +7,7 @@ return {
       "nvim-treesitter/nvim-treesitter",
     },
     keys = {
-      { "<C-a>",      "<cmd>CodeCompanionActions<cr>",     mode = { "n", "v" }, desc = "CodeCompanion Actions" },
+      { "<leader>ct", "<cmd>CodeCompanionActions<cr>",     mode = { "n", "v" }, desc = "CodeCompanion Actions" },
       { "<leader>cc", "<cmd>CodeCompanionChat Toggle<cr>", mode = { "n", "v" }, desc = "Toggle CodeCompanion Chat" },
       { "<leader>cn", "<cmd>CodeCompanionChat<cr>",        mode = { "n", "v" }, desc = "New CodeCompanion Chat" },
       { "<leader>ca", "<cmd>CodeCompanionChat Add<cr>",    mode = { "v" },      desc = "Add selection to Chat" },
@@ -48,6 +48,14 @@ return {
       },
     },
     opts = {
+      display = {
+        chat = {
+          window = {
+            position = "right",
+            width = 0.4,
+          }
+        },
+      },
       prompt_library = {
         ["MR Summary"] = {
           strategy = "chat",
@@ -110,7 +118,28 @@ return {
           agents = {
             copilot_cli = {
               cmd = "copilot",
-              args = {},
+              args = {
+                "--allow-all-urls",
+                "--allow-all-paths",
+                "--allow-tool", "shell(cat)",
+                "--allow-tool", "shell(ls)",
+                "--allow-tool", "shell(find)",
+                "--allow-tool", "shell(head)",
+                "--allow-tool", "shell(tail)",
+                "--allow-tool", "shell(wc)",
+                "--allow-tool", "shell(grep)",
+                "--allow-tool", "shell(rg)",
+                "--allow-tool", "shell(fd)",
+                "--allow-tool", "shell(tree)",
+                "--allow-tool", "shell(file)",
+                "--allow-tool", "shell(which)",
+                "--allow-tool", "shell(whoami)",
+                "--allow-tool", "shell(pwd)",
+                "--allow-tool", "shell(env)",
+                "--allow-tool", "shell(date)",
+                "--allow-tool", "shell(diff)",
+                "--allow-tool", "shell(stat)",
+              },
               description = "GitHub Copilot CLI",
             },
           },

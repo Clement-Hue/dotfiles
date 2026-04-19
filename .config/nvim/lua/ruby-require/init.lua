@@ -102,9 +102,17 @@ end
 function source:resolve(item, callback)
   if item.data.type == "directory" then return callback(item) end
 
-  local ok, content = pcall(vim.fn.readfile, item.data.full_path, "", 40)
+  local ok, content = pcall(vim.fn.readfile, item.data.full_path)
   if ok and content then
-    item.documentation = { kind = "markdown", value = "```rb\n" .. table.concat(content, "\n") .. "\n```" }
+    item.documentation = {
+      kind = "plaintext",
+      value = table.concat(content, "\n"),
+      draw = function(opts)
+        local bufnr = opts.window:get_buf()
+        vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, content)
+        require("blink.cmp.lib.window.docs").highlight_with_treesitter(bufnr, "ruby", 0, #content)
+      end,
+    }
   end
   callback(item)
 end
