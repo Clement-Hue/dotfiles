@@ -70,7 +70,42 @@ local function get_base_dirs(self, req_type, context)
   end
 end
 
-local function get_items(base_dirs, dir_part, edit_range)
+local function get_items_from_dir(dir, prefix, edit_range)
+  local items = {}
+  for name, typ in vim.fs.dir(dir) do
+    if name:sub(1, 1) ~= "." then
+      local is_dir = typ == "directory"
+      local label = is_dir and (name .. "/") or name:match("(.+)%.rb$")
+
+      if label and label:sub(1, #prefix) == prefix then
+        items[#items + 1] = {
+          label = label,
+          kind = is_dir and CompletionItemKind.Folder or CompletionItemKind.File,
+          textEdit = { newText = label, range = edit_range },
+          sortText = (is_dir and "1" or "2") .. name:lower(),
+          data = { full_path = dir .. "/" .. name, type = typ },
+        }
+      end
+    end
+  end
+  return items
+end
+
+function source:get_completions(context, callback)
+  local req_type, path_so_far = parse_require(context)
+  if not req_type then return callback(EMPTY) end
+
+  -- Split "foo/bar/baz" into dir_part="foo/bar", prefix="baz"
+  local dir_part, prefix = get_dir_and_prefix(path_so_far)
+
+  local base_dirs = get_base_dirs(self, req_type, context)
+
+  local col = context.cursor[2]
+  local edit_range = {
+    start = { line = context.cursor[1] - 1, character = col - #prefix },
+    ["end"] = { line = context.cursor[1] - 1, character = col },
+  }
+
   local seen, items = {}, {}
   for _, base in ipairs(base_dirs) do
     local dir = dir_part ~= "" and (base .. "/" .. dir_part) or base
@@ -92,32 +127,6 @@ local function get_items(base_dirs, dir_part, edit_range)
       end
     end
   end
-  return items
-end
-
-local function set_doc_window_line_numbers(window)
-  local winnr = window:get_win()
-  if not winnr or not vim.api.nvim_win_is_valid(winnr) then return end
-
-  vim.api.nvim_set_option_value("number", true, { win = winnr })
-end
-
-function source:get_completions(context, callback)
-  local req_type, path_so_far = parse_require(context)
-  if not req_type then return callback(EMPTY) end
-
-  -- Split "foo/bar/baz" into dir_part="foo/bar", prefix="baz"
-  local dir_part, prefix = get_dir_and_prefix(path_so_far)
-
-  local base_dirs = get_base_dirs(self, req_type, context)
-
-  local col = context.cursor[2]
-  local edit_range = {
-    start = { line = context.cursor[1] - 1, character = col - #prefix },
-    ["end"] = { line = context.cursor[1] - 1, character = col },
-  }
-
-  local items = get_items(base_dirs, dir_part, edit_range)
 
   callback({ is_incomplete_forward = true, is_incomplete_backward = true, items = items })
 end
@@ -134,9 +143,6 @@ function source:resolve(item, callback)
         local bufnr = opts.window:get_buf()
         vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, content)
         require("blink.cmp.lib.window.docs").highlight_with_treesitter(bufnr, "ruby", 0, #content)
-        vim.schedule(function()
-          set_doc_window_line_numbers(opts.window)
-        end)
       end,
     }
   end

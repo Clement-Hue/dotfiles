@@ -38,7 +38,7 @@ return {
         },
       },
       sources = {
-        default = { "lsp", "lazydev", "ruby_require", "path", "snippets", "buffer" },
+        default = { "lazydev", "lsp", "ruby_require", "path", "snippets", "buffer" },
         providers = {
           lazydev = {
             name = "LazyDev",
