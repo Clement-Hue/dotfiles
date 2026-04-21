@@ -1,24 +1,25 @@
 local copilot_allow_args = {
   "--allow-all-urls",
   "--allow-all-paths",
-  "--allow-tool", "shell(cat)",
-  "--allow-tool", "shell(ls)",
-  "--allow-tool", "shell(find)",
-  "--allow-tool", "shell(head)",
-  "--allow-tool", "shell(tail)",
-  "--allow-tool", "shell(wc)",
-  "--allow-tool", "shell(grep)",
-  "--allow-tool", "shell(rg)",
-  "--allow-tool", "shell(fd)",
-  "--allow-tool", "shell(tree)",
-  "--allow-tool", "shell(file)",
-  "--allow-tool", "shell(which)",
-  "--allow-tool", "shell(whoami)",
-  "--allow-tool", "shell(pwd)",
-  "--allow-tool", "shell(env)",
-  "--allow-tool", "shell(date)",
-  "--allow-tool", "shell(diff)",
-  "--allow-tool", "shell(stat)",
+  "--allow-tool", "shell(cat:*)",
+  "--allow-tool", "shell(ls:*)",
+  "--allow-tool", "shell(find:*)",
+  "--allow-tool", "shell(head:*)",
+  "--allow-tool", "shell(tail:*)",
+  "--allow-tool", "shell(wc:*)",
+  "--allow-tool", "shell(grep:*)",
+  "--allow-tool", "shell(rg:*)",
+  "--allow-tool", "shell(fd:*)",
+  "--allow-tool", "shell(tree:*)",
+  "--allow-tool", "shell(file:*)",
+  "--allow-tool", "shell(which:*)",
+  "--allow-tool", "shell(whoami:*)",
+  "--allow-tool", "shell(pwd:*)",
+  "--allow-tool", "shell(env:*)",
+  "--allow-tool", "shell(date:*)",
+  "--allow-tool", "shell(diff:*)",
+  "--allow-tool", "shell(stat:*)",
+  "--allow-tool", "shell(git:*)",
 }
 
 return {
@@ -74,7 +75,9 @@ return {
       adapters = {
         copilot_acp = function()
           return require("codecompanion.adapters").extend("copilot_acp", {
-            args = copilot_allow_args,
+            commands = {
+              default = vim.list_extend({ "copilot", "--acp", "--stdio" }, copilot_allow_args),
+            },
           })
         end,
       },

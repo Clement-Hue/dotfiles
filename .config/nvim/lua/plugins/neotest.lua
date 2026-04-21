@@ -43,7 +43,7 @@ return {
         discovery = { enabled = false },
         adapters = {
           require("neotest-jest"),
-          require("neotest-minitest"),
+          minitest,
           require("neotest-python"),
         },
         consumers = {
@@ -91,7 +91,7 @@ return {
         },
         output_panel = {
           enabled = true,
-          open = "vsplit | wincmd L",
+          open = "vsplit | wincmd L | vertical resize " .. math.floor(vim.o.columns * 0.4),
         },
       })
     end,
