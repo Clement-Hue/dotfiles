@@ -1,6 +1,7 @@
 local copilot_allow_args = {
   "--allow-all-urls",
   "--allow-all-paths",
+  "--allow-tool", "read",
   "--allow-tool", "shell(cat:*)",
   "--allow-tool", "shell(ls:*)",
   "--allow-tool", "shell(find:*)",
@@ -20,6 +21,7 @@ local copilot_allow_args = {
   "--allow-tool", "shell(diff:*)",
   "--allow-tool", "shell(stat:*)",
   "--allow-tool", "shell(git:*)",
+  "--allow-tool", "shell(bundle exec:*)",
 }
 
 return {
@@ -73,13 +75,15 @@ return {
     },
     opts = {
       adapters = {
-        copilot_acp = function()
-          return require("codecompanion.adapters").extend("copilot_acp", {
-            commands = {
-              default = vim.list_extend({ "copilot", "--acp", "--stdio" }, copilot_allow_args),
-            },
-          })
-        end,
+        acp = {
+          copilot_acp = function()
+            return require("codecompanion.adapters").extend("copilot_acp", {
+              commands = {
+                default = vim.list_extend({ "copilot", "--acp", "--stdio" }, copilot_allow_args),
+              },
+            })
+          end,
+        },
       },
       display = {
         chat = {
