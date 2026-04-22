@@ -7,6 +7,7 @@ return {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
       "nvim-telescope/telescope-ui-select.nvim",
     },
+    event = "VeryLazy",
     keys = {
       { "gr",               "<cmd>Telescope lsp_references<cr>",        nowait = true,                   desc = "LSP references" },
       { "gd",               "<cmd>Telescope lsp_definitions<cr>",       desc = "LSP definition" },
