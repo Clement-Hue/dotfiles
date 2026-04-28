@@ -18,3 +18,6 @@ keymap("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "New tab" })
 
 keymap("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
+keymap("n", "<leader>rs", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+  { desc = "Rename word under cursor in buffer" })
+keymap("x", "<leader>rs", [["zy:%s/<C-r>z/<C-r>z/gI<Left><Left><Left>]], { desc = "Rename selection in buffer" })

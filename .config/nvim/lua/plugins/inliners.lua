@@ -10,6 +10,29 @@ return {
     "lukas-reineke/indent-blankline.nvim",
     event = { "BufReadPre", "BufNewFile" },
     main = "ibl",
-    opts = {},
+    opts = {
+      scope = {
+        enabled = true,
+        include = {
+          node_type = {
+            ruby = {
+              "method",
+              "singleton_method",
+              "if",
+              "elsif",
+              "unless",
+              "while",
+              "until",
+              "for",
+              "case",
+              "begin",
+              "module",
+              "do_block",
+              "block",
+            },
+          },
+        },
+      },
+    },
   },
 }
