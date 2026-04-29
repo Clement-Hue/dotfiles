@@ -49,7 +49,7 @@ return {
             name = "Ruby Require",
             module = "ruby-require",
             score_offset = 50,
-          },
+          }
         },
       },
     },

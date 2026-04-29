@@ -1,5 +1,9 @@
 return {
   {
+    "tpope/vim-fugitive",
+    cmd = { "Git", "G", "Gdiffsplit", "Gvdiffsplit", "Gread", "Gwrite", "Ggrep", "GMove", "GDelete", "GBrowse" },
+  },
+  {
     "akinsho/git-conflict.nvim",
     version = "*",
     event = "BufReadPre",
