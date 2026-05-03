@@ -128,3 +128,5 @@ bindkey '^R' history-incremental-search-backward
 # opencode
 export PATH=/home/clement/.opencode/bin:$PATH
 eval "$(rbenv init -)"
+
+export OPENAI_API_KEY="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"
