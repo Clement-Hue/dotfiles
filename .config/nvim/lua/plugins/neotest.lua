@@ -20,23 +20,7 @@ return {
       { "<leader>nS", function() require("neotest").summary.toggle() end,              desc = "Toggle summary" },
     },
     config = function()
-      local minitest = require("neotest-minitest")
-      local original_build_spec = minitest.build_spec
-
-      -- Fix --name regex for Minitest::Spec with module namespaces.
-      -- The plugin anchors with ^ but doesn't capture module/class prefixes,
-      -- so the filter never matches. Removing ^ lets it match as a substring.
-      minitest.build_spec = function(args)
-        local spec = original_build_spec(args)
-        if spec and spec.command then
-          for i, arg in ipairs(spec.command) do
-            if type(arg) == "string" and arg:match("^/%^") then
-              spec.command[i] = "/" .. arg:sub(3)
-            end
-          end
-        end
-        return spec
-      end
+      local minitest = require("utils.neotest_minitest")()
 
       require("neotest").setup({
         -- Disable automatic discovery to avoid scanning the entire project tree

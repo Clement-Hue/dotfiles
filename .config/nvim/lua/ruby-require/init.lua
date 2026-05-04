@@ -1,5 +1,4 @@
 --- blink.cmp source for Ruby require/require_relative path completion.
---- opts.load_paths: dirs relative to root (default: lib/, app/, config/)
 --- opts.root_markers: files to find project root (default: Gemfile, .git)
 
 local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
