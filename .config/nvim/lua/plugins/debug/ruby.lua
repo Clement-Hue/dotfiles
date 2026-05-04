@@ -1,32 +1,4 @@
 return function(dap)
-  local function shellescape(value)
-    return vim.fn.shellescape(tostring(value))
-  end
-
-  local function shell_command(command, args, env)
-    local parts = {}
-
-    for key, value in pairs(env or {}) do
-      parts[#parts + 1] = key .. "=" .. shellescape(value)
-    end
-
-    parts[#parts + 1] = shellescape(command)
-
-    for _, arg in ipairs(args or {}) do
-      parts[#parts + 1] = shellescape(arg)
-    end
-
-    return table.concat(parts, " ")
-  end
-
-  local function runtime_dir()
-    local dir = vim.fn.getenv("XDG_RUNTIME_DIR")
-    if dir == vim.NIL or dir == "" then
-      dir = vim.loop.os_tmpdir()
-    end
-    return dir
-  end
-
   local function forward_output(pipe, category)
     pipe:read_start(function(_, data)
       if data then
@@ -40,6 +12,14 @@ return function(dap)
     end)
   end
 
+  local function runtime_dir()
+    local dir = vim.fn.getenv("XDG_RUNTIME_DIR")
+    if dir == vim.NIL or dir == "" then
+      dir = vim.loop.os_tmpdir()
+    end
+    return dir
+  end
+
   -----------------------------------------------------------------------
   -- Adapter: Ruby rdbg (requires 'debug' gem in Gemfile)
   -----------------------------------------------------------------------
@@ -50,30 +30,38 @@ return function(dap)
     local sock_path = runtime_dir() .. "/rdbg-" .. vim.fn.getpid()
     os.remove(sock_path)
 
-    local ruby_args = {
+    local args = {
       "--command",
       "--open",
       "--stop-at-load",
       "--sock-path=" .. sock_path,
       "--",
     }
-    if config.bundle == true then
-      ruby_args[#ruby_args + 1] = "bundle"
-      ruby_args[#ruby_args + 1] = "exec"
+    if config.bundle then
+      table.insert(args, "bundle")
+      table.insert(args, "exec")
     end
-    ruby_args[#ruby_args + 1] = config.command or "ruby"
-    ruby_args[#ruby_args + 1] = target
-    for _, arg in ipairs(config.args or {}) do
-      ruby_args[#ruby_args + 1] = arg
+    table.insert(args, config.command or "ruby")
+    table.insert(args, target)
+    for _, a in ipairs(config.args or {}) do
+      table.insert(args, a)
     end
 
-    local cmd = shell_command("rdbg", ruby_args, config.env)
+    local cmd_parts = {}
+    for k, v in pairs(config.env or {}) do
+      table.insert(cmd_parts, k .. "=" .. vim.fn.shellescape(v))
+    end
+    table.insert(cmd_parts, vim.fn.shellescape("rdbg"))
+    for _, a in ipairs(args) do
+      table.insert(cmd_parts, vim.fn.shellescape(a))
+    end
+
     local stdout = vim.loop.new_pipe(false)
     local stderr = vim.loop.new_pipe(false)
 
     local handle
     handle = vim.loop.spawn("bash", {
-      args = { "-l", "-c", cmd },
+      args = { "-l", "-c", table.concat(cmd_parts, " ") },
       cwd = config.cwd or vim.fn.getcwd(),
       detached = true,
       stdio = { nil, stdout, stderr },

@@ -4,6 +4,9 @@ return {
     dependencies = {
       {
         "copilotlsp-nvim/copilot-lsp",
+        init = function()
+          vim.g.copilot_nes_debounce = 50
+        end,
       },
     },
     cmd = "Copilot",
