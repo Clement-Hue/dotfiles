@@ -7,7 +7,7 @@ return {
       "nvim-treesitter/nvim-treesitter",
       -- Adapters
       "nvim-neotest/neotest-jest",
-      "zidhuss/neotest-minitest",
+      "Clement-Hue/neotest-minitest",
       "nvim-neotest/neotest-python",
     },
     keys = {
@@ -20,14 +20,13 @@ return {
       { "<leader>nS", function() require("neotest").summary.toggle() end,              desc = "Toggle summary" },
     },
     config = function()
-      local minitest = require("utils.neotest_minitest")()
-
       require("neotest").setup({
         -- Disable automatic discovery to avoid scanning the entire project tree
+        log_level = vim.log.levels.TRACE,
         discovery = { enabled = false },
         adapters = {
           require("neotest-jest"),
-          minitest,
+          require("neotest-minitest"),
           require("neotest-python"),
         },
         consumers = {

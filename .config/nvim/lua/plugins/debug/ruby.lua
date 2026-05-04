@@ -90,9 +90,7 @@ return function(dap)
   dap.adapters.ruby = function(callback, config)
     local default_command = config.command or "rdbg"
     local command = default_command
-    local args = vim.tbl_filter(function(arg)
-      return arg ~= "-e" and arg ~= "cont"
-    end, config.args or {})
+    local args = config.args or {}
 
     if config.bundle then
       command = "bundle"
