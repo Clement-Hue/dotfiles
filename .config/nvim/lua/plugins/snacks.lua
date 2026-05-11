@@ -6,6 +6,9 @@ return {
       { "<leader>nh", function() require("snacks").notifier.show_history() end, desc = "Notification history" },
     },
     opts = {
+      input = {
+        enabled = true,
+      },
       notifier = {
         enabled = true,
         top_down = false,
