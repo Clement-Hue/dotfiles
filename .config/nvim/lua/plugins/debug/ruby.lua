@@ -20,6 +20,46 @@ return function(dap)
     return dir
   end
 
+  local function build_shell_command(command, args, config)
+    local cmd_parts = {}
+    for k, v in pairs(config.env or {}) do
+      table.insert(cmd_parts, k .. "=" .. vim.fn.shellescape(v))
+    end
+    table.insert(cmd_parts, vim.fn.shellescape(command))
+    for _, a in ipairs(args) do
+      table.insert(cmd_parts, vim.fn.shellescape(a))
+    end
+
+    return table.concat(cmd_parts, " ")
+  end
+
+  local function spawn_rdbg(command, args, config)
+    local shell_command = build_shell_command(command, args, config)
+
+    local stdout = vim.loop.new_pipe(false)
+    local stderr = vim.loop.new_pipe(false)
+
+    local handle
+    handle = vim.loop.spawn("bash", {
+      args = { "-l", "-c", shell_command },
+      cwd = config.cwd or vim.fn.getcwd(),
+      detached = true,
+      stdio = { nil, stdout, stderr },
+    }, function(code)
+      if handle then handle:close() end
+      if stdout then stdout:close() end
+      if stderr then stderr:close() end
+      if code ~= 0 then
+        vim.schedule(function()
+          vim.notify("rdbg exited with code " .. code, vim.log.levels.WARN)
+        end)
+      end
+    end)
+
+    forward_output(stdout, "stdout")
+    forward_output(stderr, "stderr")
+  end
+
   -----------------------------------------------------------------------
   -- Adapter: Ruby rdbg (requires 'debug' gem in Gemfile)
   -----------------------------------------------------------------------
@@ -47,37 +87,7 @@ return function(dap)
       table.insert(args, a)
     end
 
-    local cmd_parts = {}
-    for k, v in pairs(config.env or {}) do
-      table.insert(cmd_parts, k .. "=" .. vim.fn.shellescape(v))
-    end
-    table.insert(cmd_parts, vim.fn.shellescape("rdbg"))
-    for _, a in ipairs(args) do
-      table.insert(cmd_parts, vim.fn.shellescape(a))
-    end
-
-    local stdout = vim.loop.new_pipe(false)
-    local stderr = vim.loop.new_pipe(false)
-
-    local handle
-    handle = vim.loop.spawn("bash", {
-      args = { "-l", "-c", table.concat(cmd_parts, " ") },
-      cwd = config.cwd or vim.fn.getcwd(),
-      detached = true,
-      stdio = { nil, stdout, stderr },
-    }, function(code)
-      if handle then handle:close() end
-      if stdout then stdout:close() end
-      if stderr then stderr:close() end
-      if code ~= 0 then
-        vim.schedule(function()
-          vim.notify("rdbg exited with code " .. code, vim.log.levels.WARN)
-        end)
-      end
-    end)
-
-    forward_output(stdout, "stdout")
-    forward_output(stderr, "stderr")
+    spawn_rdbg("rdbg", args, config)
 
     vim.defer_fn(function()
       callback({ type = "pipe", pipe = sock_path })
@@ -90,22 +100,47 @@ return function(dap)
   dap.adapters.ruby = function(callback, config)
     local default_command = config.command or "rdbg"
     local command = default_command
-    local args = config.args or {}
+    local args = vim.deepcopy(config.args or {})
 
     if config.bundle then
       command = "bundle"
       args = vim.list_extend({ "exec", default_command }, args)
     end
+
+    local rewritten_args = {}
+    local inserted_sock_path = false
+    local i = 1
+    while i <= #args do
+      local arg = args[i]
+
+      if arg == "--port" then
+        i = i + 2
+      elseif vim.startswith(arg, "--port=") then
+        i = i + 1
+      else
+        table.insert(rewritten_args, arg)
+        if arg == "-O" and not inserted_sock_path then
+          table.insert(rewritten_args, "--sock-path=${pipe}")
+          inserted_sock_path = true
+        end
+        i = i + 1
+      end
+    end
+
+    if not inserted_sock_path then
+      table.insert(rewritten_args, 1, "--sock-path=${pipe}")
+      table.insert(rewritten_args, 1, "-O")
+    end
+
     callback({
-      type = "server",
-      host = config.host or "127.0.0.1",
-      port = assert(config.port, "ruby adapter requires `port`"),
+      type = "pipe",
+      pipe = "${pipe}",
       executable = {
-        command = command,
-        args = args,
+        command = "bash",
+        args = { "-l", "-c", build_shell_command(command, rewritten_args, config) },
         cwd = config.cwd or vim.fn.getcwd(),
         detached = true,
-      },
+      }
     })
   end
 
