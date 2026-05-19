@@ -7,6 +7,9 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
+-- Enable LSP on-type formatting for all clients that support it
+vim.lsp.on_type_formatting.enable()
+
 -- Better diagnostics display
 vim.diagnostic.config({
   virtual_text = {
