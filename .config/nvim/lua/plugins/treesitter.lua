@@ -14,5 +14,10 @@ return {
         end,
       })
     end,
-  }
+  },
+  {
+    "RRethy/nvim-treesitter-endwise",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    event = "InsertEnter",
+  },
 }
