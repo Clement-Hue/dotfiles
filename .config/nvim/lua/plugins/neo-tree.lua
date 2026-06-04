@@ -1,3 +1,8 @@
+local function copy_to_system_clipboard(value, label)
+  vim.fn.setreg("+", value)
+  vim.notify(("Copied %s: %s"):format(label, value))
+end
+
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -28,13 +33,20 @@ return {
         width = 35,
         mappings = {
           ["<C-r>"] = "noop",
+          ["y"] = {
+            "noop",
+            nowait = false,
+            desc = "Path actions",
+          },
+          ["yy"] = {
+            "copy_to_clipboard",
+            desc = "Copy node for paste",
+          },
 
           ["yf"] = {
             function(state)
               local node = state.tree:get_node()
-              local name = node.name
-              vim.fn.setreg("+", name)
-              vim.notify("Copied filename: " .. name)
+              copy_to_system_clipboard(node.name, "filename")
             end,
             desc = "Copy filename",
           },
@@ -43,8 +55,7 @@ return {
             function(state)
               local node = state.tree:get_node()
               local path = vim.fn.fnamemodify(node:get_id(), ":.")
-              vim.fn.setreg("+", path)
-              vim.notify("Copied relative path: " .. path)
+              copy_to_system_clipboard(path, "relative path")
             end,
             desc = "Copy relative path",
           },
@@ -52,9 +63,7 @@ return {
           ["yP"] = {
             function(state)
               local node = state.tree:get_node()
-              local path = node:get_id()
-              vim.fn.setreg("+", path)
-              vim.notify("Copied absolute path: " .. path)
+              copy_to_system_clipboard(node:get_id(), "absolute path")
             end,
             desc = "Copy absolute path",
           },
