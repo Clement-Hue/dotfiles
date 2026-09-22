@@ -11,8 +11,13 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     main = "ibl",
     opts = {
+      indent = {
+        -- Keep indentation guides visible, but make them as subtle as line numbers.
+        highlight = "LineNr",
+      },
       scope = {
         enabled = true,
+        highlight = "Comment",
         include = {
           node_type = {
             ruby = {
