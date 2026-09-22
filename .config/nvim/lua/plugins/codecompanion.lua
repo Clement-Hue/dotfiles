@@ -133,7 +133,7 @@ return {
           },
           adapter = {
             name = "copilot_acp",
-            model = "claude-opus-4.6",
+            model = "gpt-5.6-luna",
           },
           opts = {
             ---Decorate the user message before it's sent to the LLM
@@ -163,7 +163,7 @@ return {
         inline = {
           adapter = {
             name = "copilot",
-            model = "claude-opus-4.6",
+            model = "gpt-5.4-luna",
           },
         },
         shared = {
