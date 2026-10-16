@@ -6,7 +6,9 @@ return {
 
     smart_splits.setup({
       -- Recommended: will resize in the direction you are moving
-      at_edge = "stop",
+      move = {
+        at_edge = "stop",
+      },
     })
 
     -- Navigation: move between Neovim splits and wezterm panes
