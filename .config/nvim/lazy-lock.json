@@ -1,4 +1,5 @@
 {
+  "backend-wezterm": { "branch": "master", "commit": "ae840db696791f638c190c3e0534d2ddfcd5e6a7" },
   "blink.cmp": { "branch": "main", "commit": "78336bc89ee5365633bcf754d93df01678b5c08f" },
   "catppuccin": { "branch": "main", "commit": "edefef779ab08ce1a4a404713e3012b0d202bd35" },
   "codecompanion.nvim": { "branch": "main", "commit": "6794c8bcbe9e8614588749cafb5de29d7fa57c3b" },

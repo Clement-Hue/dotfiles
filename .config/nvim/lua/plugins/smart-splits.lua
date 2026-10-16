@@ -1,13 +1,23 @@
 return {
   "mrjones2014/smart-splits.nvim",
   lazy = false,
+  dependencies = {
+    {
+      "smart-splits-nvim/backend-wezterm",
+      main = "smart-splits-backend-wezterm",
+      opts = { cli_path = "wezterm" },
+    },
+  },
   config = function()
     local smart_splits = require("smart-splits")
 
     smart_splits.setup({
-      -- Recommended: will resize in the direction you are moving
+      -- Preserve the previous default: wrap to the opposite Neovim split at an edge.
       move = {
-        at_edge = "stop",
+        at_edge = "wrap",
+      },
+      mux = {
+        backend = "smart-splits-backend-wezterm",
       },
     })
 

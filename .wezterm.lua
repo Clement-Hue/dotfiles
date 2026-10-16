@@ -1,42 +1,8 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
+local smart_splits = wezterm.plugin.require("https://github.com/smart-splits-nvim/backend-wezterm")
 
--- smart-splits.nvim integration: detect if pane is running Neovim
--- This uses the IS_NVIM user var set by the smart-splits plugin
-local function is_vim(pane)
-  return pane:get_user_vars().IS_NVIM == "true"
-end
-
-local direction_keys = {
-  h = "Left",
-  j = "Down",
-  k = "Up",
-  l = "Right",
-}
-
--- If the pane is running Neovim, forward the key so smart-splits handles it.
--- Otherwise, do wezterm's native pane navigation/resize.
-local function split_nav(resize_or_move, key)
-  return {
-    key = key,
-    mods = resize_or_move == "resize" and "META" or "CTRL",
-    action = wezterm.action_callback(function(win, pane)
-      if is_vim(pane) then
-        win:perform_action({
-          SendKey = { key = key, mods = resize_or_move == "resize" and "META" or "CTRL" },
-        }, pane)
-      else
-        if resize_or_move == "resize" then
-          win:perform_action({ AdjustPaneSize = { direction_keys[key], 3 } }, pane)
-        else
-          win:perform_action({ ActivatePaneDirection = direction_keys[key] }, pane)
-        end
-      end
-    end),
-  }
-end
-
-return {
+local config = {
   -- Font
   font = wezterm.font("JetBrains Mono"),
   font_size = 16,
@@ -107,23 +73,16 @@ return {
     -- Search (like / in vim, AZERTY: / needs Shift)
     { key = "mapped:/", mods = "LEADER|SHIFT", action = act.Search("CurrentSelectionOrEmptyString") },
 
-    -- Pane navigation (Ctrl+hjkl) — smart-splits aware
-    -- When in Neovim, forwards the key so smart-splits handles cross-boundary navigation.
-    -- When in a regular pane, does wezterm's native pane switching.
-    split_nav("move", "h"),
-    split_nav("move", "j"),
-    split_nav("move", "k"),
-    split_nav("move", "l"),
-
-    -- Pane resize (Alt+hjkl) — smart-splits aware
-    split_nav("resize", "h"),
-    split_nav("resize", "j"),
-    split_nav("resize", "k"),
-    split_nav("resize", "l"),
-
     -- Font size
     { key = "=", mods = "CTRL", action = act.IncreaseFontSize },
     { key = "-", mods = "CTRL", action = act.DecreaseFontSize },
     { key = "0", mods = "CTRL", action = act.ResetFontSize },
   },
 }
+
+smart_splits.apply_to_config(config, {
+  -- Keep Ctrl-h/j/k/l moving among WezTerm panes when Neovim reaches its edge.
+  at_edge = "wrap",
+})
+
+return config
